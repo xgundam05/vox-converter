@@ -26,7 +26,7 @@ function VoxModel(options){
   }
 
   for (var i = 0; i < this.width * this.height * this.depth; i++){
-    this.data[i] = -1;
+    this.data[i] = 0x00;
   }
 }
 
