@@ -1,0 +1,14 @@
+{
+  "main": "index.html",
+  "name": "vox-converter",
+  "description": "voxel-to-stl converter",
+  "window": {
+    "title": "vox-converter",
+    "toolbar": false,
+    "frame": true,
+    "width": 800,
+    "height": 600,
+    "min_width": 640,
+    "min_height": 480
+  }
+}
