@@ -2,6 +2,7 @@
   "main": "index.html",
   "name": "vox-converter",
   "description": "voxel-to-stl converter",
+  "chromium-args": "--disable-setuid-sandbox",
   "window": {
     "title": "vox-converter",
     "toolbar": false,
