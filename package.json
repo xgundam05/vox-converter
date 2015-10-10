@@ -4,6 +4,7 @@
   "description": "voxel-to-stl converter",
   "chromium-args": "--disable-setuid-sandbox",
   "window": {
+    "icon": "icon.png",
     "title": "vox-converter",
     "toolbar": false,
     "frame": true,
