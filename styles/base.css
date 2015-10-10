@@ -2,6 +2,10 @@ body{
   background: linear-gradient(180deg, #444, #aaa);
 }
 
+div{
+  box-sizing: border-box;
+}
+
 #controls{
   position: absolute;
   top: 10px;
@@ -24,28 +28,17 @@ body{
   height: 100%;
 }
 
-.squishy-btn{
-  color: white;
-  background-color: #777;
-  cursor: pointer;
-  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.5);
-}
-.squishy-btn:hover{
-  background-color: #888;
-}
-.squishy-btn:active{
-  transform: translate(0px, 1px);
-  box-shadow: 0px 0px 2px black;
-}
-
-#fileBtn{
-  border-radius: 100%;
-  border: none;
-  width: 30px;
-  height: 30px;
-  line-height: 30px;
-  font-size: 25px;
-}
-#fileBtn:focus{
-  outline: 0;
+#handle{
+  position: absolute;
+  padding-left: 2px;
+  top: -2px;
+  left: -2px;
+  width: 200px;
+  height: 25px;
+  background-color: rgba(192, 192, 192, 0.5);
+  border: solid 2px transparent;
+  border-radius: 5px 5px 0px 0px;
+  cursor: move;
+  -webkit-user-select: none;
+  user-select: none;
 }
