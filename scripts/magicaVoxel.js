@@ -80,7 +80,7 @@ function loadFromMain(chunk){
       model = new VoxModel({width: w, height: h, depth: d, zUp: true});
       var numVoxels = voxels.contents.readUIntLE(0, 4);
 
-      for (var j = 0; j < numVoxels; j+){
+      for (var j = 0; j < numVoxels; j++){
         var x = voxels.contents[(j * 4) + 4];
         var y = voxels.contents[(j * 4) + 5];
         var z = voxels.contents[(j * 4) + 6];
