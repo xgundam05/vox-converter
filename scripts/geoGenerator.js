@@ -15,6 +15,8 @@ var isRunning = false;
 var startedOn = undefined;
 var models = [];
 
+self.addEventListener('message', receiveMessage);
+
 function receiveMessage(e){
   var data = e.data;
   if (!data.hasOwnProperty('cmd'))
@@ -27,7 +29,7 @@ function receiveMessage(e){
         models[data.mdl.id] = data.mdl;
 
       var mdl = models[data.mdl.id];
-      models[data.mdl.id].data = new UInt8Array(models[data.mdl.id].buffer);
+      models[data.mdl.id].data = new Uint8Array(data.buffer);
 
       var xDiv = Math.ceil(mdl.width / 16);
       var yDiv = Math.ceil(mdl.height / 16);
@@ -36,12 +38,13 @@ function receiveMessage(e){
       for (var z = 0; z < zDiv; z++){
         for (var y = 0; y < yDiv; y++){
           for (var x = 0; x < xDiv; x++){
-            jobs.push({
+            var item = {
               x: x * 16,
               y: y * 16,
               z: z * 16,
               modelId: data.mdl.id
-            });
+            };
+            jobs.push(item);
           }
         }
       }
@@ -83,7 +86,7 @@ function monitorJobs(){
   }
 
   if (isRunning)
-    setTimeout(monitorJobs, 5);
+    setTimeout(monitorJobs, 1);
 }
 
 // Create the Geometry and such
@@ -91,7 +94,7 @@ function createGeometry(job){
   var model = models[job.modelId];
 
   var geometry = new Geometry();
-  for (var z = job.z; y < job.z + 16 && z < model.depth; z++){
+  for (var z = job.z; z < job.z + 16 && z < model.depth; z++){
     for (var y = job.y; y < job.y + 16 && y < model.height; y++){
       for (var x = job.x; x < job.x + 16 && x < model.width; x++){
         if (model.data[x + (y * model.width) + (z * model.width * model.height)] != 0x00){
@@ -149,7 +152,7 @@ function createGeometry(job){
 
           // BOTTOM faces
           if (y == 0 ||
-              model.data[x + ((y - 1) * model.width) + (z * model.width * model.depth)] == 0x00){
+              model.data[x + ((y - 1) * model.width) + (z * model.width * model.height)] == 0x00){
             var ao = getAO(x, y, z, 'BOTTOM', block);
 
             var index = geometry.vertices.length - 1;
@@ -276,13 +279,13 @@ function getSurroundingBlock(_x, _y, _z, mdl){
         if ((x < 0 || x >= mdl.width) ||
             (y < 0 || y >= mdl.width) ||
             (z < 0 || z >= mdl.width)){
-          block.push(0);
+          block.push(0x00);
         }
-        else if (mdl.data[x + (y * mdl.width) + (z * mdl.width * mdl.height)] > 0){
-          block.push(1);
+        else if (mdl.data[x + (y * mdl.width) + (z * mdl.width * mdl.height)] > 0x00){
+          block.push(0x01);
         }
         else{
-          block.push(0);
+          block.push(0x00);
         }
       }
     }
@@ -299,7 +302,7 @@ function flipQuads(ao){
 
   if (ao[1] + ao[2] > ao[0] + ao[3])
     return true;
-  else if (ao[1] + ao[2] == ao[0] + a[3]){
+  else if (ao[1] + ao[2] == ao[0] + ao[3]){
     var val = ao[1] + ao[2] + ao[3];
     if (val % 3 != 0)
       return true;
@@ -309,7 +312,7 @@ function flipQuads(ao){
 }
 
 function getAO(x, y, z, dir, block){
-  var ao = new UInt8Array(4);
+  var ao = new Uint8Array(4);
 
   switch(dir){
     case 'TOP':
@@ -359,7 +362,7 @@ function vertAO(side1, side2, corner){
   if (side1 && side2)
     return 3;
   else
-    return sid1 + side2 + corner;
+    return side1 + side2 + corner;
 }
 
 // Classes
@@ -411,13 +414,17 @@ Geometry.prototype = {
       view[(i * 3) + 1] = this.faces[i].b;
       view[(i * 3) + 2] = this.faces[i].c;
     }
+
+    return buffer;
   },
   getColorBuffer: function(){
     var buffer = new ArrayBuffer(this.colors.length);
-    var view = new UInt8Array(buffer);
+    var view = new Uint8Array(buffer);
 
     for (var i = 0; i < this.colors.length; i++){
       view[i] = this.colors[i];
     }
+
+    return buffer;
   }
 };
