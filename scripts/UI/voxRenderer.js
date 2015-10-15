@@ -2,6 +2,11 @@ function voxRenderer(options){
   this.domElement = undefined;
   this.material = undefined;
   this.jobs = [];
+  this.colors = {
+    l: new THREE.Color(0x6aa2bf),
+    m: new THREE.Color(0x4581a0),
+    d: new THREE.Color(0x2d5368)
+  }
 
   for (var prop in options){
     if (this.hasOwnProperty(prop))
@@ -14,6 +19,7 @@ function voxRenderer(options){
   this.renderer = undefined;
   this.clock = undefined;
   this.voxModel = undefined;
+  this.light = undefined;
 }
 
 voxRenderer.prototype = {
@@ -30,7 +36,7 @@ voxRenderer.prototype = {
 
     if (this.material === undefined){
       this.material = new THREE.MeshLambertMaterial({
-        color: 0x5c79a9
+        vertexColors: THREE.VertexColors
       });
     }
 
@@ -40,7 +46,7 @@ voxRenderer.prototype = {
     fov = this.__getFov();
     aspect = width / height;
     near = 0.1;
-    far = 10000;
+    far = 300;
 
     // Camera
     this.camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
@@ -60,7 +66,9 @@ voxRenderer.prototype = {
     // lights
     var l1 = new THREE.DirectionalLight(0xffffff, 0.7);
     var l2 = new THREE.AmbientLight(0xa0a0a0);
+
     l1.position.set(3, 4, 5);
+
     this.scene.add(l1);
     this.scene.add(l2);
 
@@ -81,6 +89,7 @@ voxRenderer.prototype = {
       self.camera.updateProjectionMatrix();
 
       self.renderer.setSize(w, h);
+
       self.render();
     });
   },
@@ -114,7 +123,18 @@ voxRenderer.prototype = {
           )
         );
 
-        // Handle Colors if you're not gonna do SSAO
+        var index = geo.faces.length - 1;
+        var cval = cBuffer[i];
+        var color = cval == 0 ? this.colors.l : (cval == 1 ? this.colors.m : this.colors.d);
+        geo.faces[index].vertexColors[0] = color;//new THREE.Color(color);
+
+        cval = cBuffer[i + 1];
+        color = cval == 0 ? this.colors.l : (cval == 1 ? this.colors.m : this.colors.d);
+        geo.faces[index].vertexColors[1] = color;//new THREE.Color(color);
+
+        cval = cBuffer[i + 2];
+        color = cval == 0 ? this.colors.l : (cval == 1 ? this.colors.m : this.colors.d);
+        geo.faces[index].vertexColors[2] = color;//new THREE.Color(color);
       }
 
       geo.computeFaceNormals();
