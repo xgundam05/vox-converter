@@ -10,11 +10,6 @@ var isDOMLoaded = false;
 var renderer = undefined;
 var worker = undefined;
 
-// Colors
-var lite = 0xffffff;
-var mid = 0xa7a7a7;
-var dark = 0x505050;
-
 window.onload = function(){
   new draggable(
     document.getElementById('controls'),
