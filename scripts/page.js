@@ -174,6 +174,7 @@ function Initialize(){
     camera.updateProjectionMatrix();
 
     renderer.setSize(w, h);
+    Render();
   }, false);
 
   document.getElementById('voxFile').addEventListener('change', handleFileOpen, false);

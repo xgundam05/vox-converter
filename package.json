@@ -2,7 +2,7 @@
   "main": "index.html",
   "name": "vox-converter",
   "description": "voxel-to-stl converter",
-  "chromium-args": "--disable-setuid-sandbox",
+  "chromium-args": "--disable-setuid-sandbox --enable-webgl --ignore-gpu-blacklist",
   "window": {
     "icon": "icon.png",
     "title": "vox-converter",
