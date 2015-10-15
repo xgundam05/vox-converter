@@ -2,6 +2,7 @@
 // ===============================
 
 var fs = require('fs');
+var voxmodel = require('./voxModel.js');
 
 // Helper Objects
 function MVoxChunk(i, s, cs, c, ch){
@@ -10,24 +11,6 @@ function MVoxChunk(i, s, cs, c, ch){
   this.childrenSize = cs;
   this.contents = c;
   this.children = ch;
-}
-
-function VoxModel(options){
-  this.width = 0;
-  this.height = 0;
-  this.depth = 0;
-  this.zUp = false;
-  this.data = [];
-
-  if (options){
-    for (var prop in options)
-      if (this.hasOwnProperty(prop))
-        this[prop] = options[prop];
-  }
-
-  for (var i = 0; i < this.width * this.height * this.depth; i++){
-    this.data[i] = 0x00;
-  }
 }
 
 // Load from a file
@@ -77,7 +60,7 @@ function loadFromMain(chunk){
     var d = size.contents.readUIntLE(8, 4);
 
     if (w > 0 && h > 0 && d > 0){
-      model = new VoxModel({width: w, height: h, depth: d, zUp: true});
+      model = voxmodel({width: w, height: h, depth: d, zUp: true});
       var numVoxels = voxels.contents.readUIntLE(0, 4);
 
       for (var j = 0; j < numVoxels; j++){
