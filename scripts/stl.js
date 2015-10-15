@@ -228,6 +228,24 @@ function writeToFile(mdl, fname){
   fs.closeSync(file);
 }
 
+function calcSolidWeight(volume, material){
+  if (material === undefined) return 0;
+
+  var weight = 0;
+  switch(material){
+    case 'PLA':
+      weight = (1.25 * volume) / 1000;
+      break;
+    case 'ABS':
+      weight = (1.04 * volume) / 1000;
+      break;
+    default:
+      break;
+  }
+
+  return weight;
+}
+
 exports.createFromFox = createFromVox;
 exports.writeToFile = writeToFile;
 // exports.createFromGeometry(geo)

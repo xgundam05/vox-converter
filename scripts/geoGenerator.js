@@ -13,7 +13,6 @@
 var jobs = [];
 var isRunning = false;
 var startedOn = undefined;
-var models = [];
 
 self.addEventListener('message', receiveMessage);
 
@@ -25,11 +24,8 @@ function receiveMessage(e){
   switch(data.cmd){
     case 'create':
       wakeUp();
-      if (models[data.mdl.id] === undefined)
-        models[data.mdl.id] = data.mdl;
-
-      var mdl = models[data.mdl.id];
-      models[data.mdl.id].data = new Uint8Array(data.buffer);
+      var mdl = data.mdl;
+      mdl.data = new Uint8Array(data.buffer);
 
       var xDiv = Math.ceil(mdl.width / 16);
       var yDiv = Math.ceil(mdl.height / 16);
@@ -42,7 +38,7 @@ function receiveMessage(e){
               x: x * 16,
               y: y * 16,
               z: z * 16,
-              modelId: data.mdl.id
+              model: mdl
             };
             jobs.push(item);
           }
@@ -91,7 +87,7 @@ function monitorJobs(){
 
 // Create the Geometry and such
 function createGeometry(job){
-  var model = models[job.modelId];
+  var model = job.model;
 
   var geometry = new Geometry();
   for (var z = job.z; z < job.z + 16 && z < model.depth; z++){
@@ -262,7 +258,6 @@ function createGeometry(job){
 
     self.postMessage({
       cmd: 'geo',
-      modelId: job.modelId,
       vertices: vBuffer,
       faces: fBuffer,
       colors: cBuffer
