@@ -199,7 +199,7 @@ function createGeometry(job){
           // LEFT faces
           if (x == 0 ||
               model.data[(x - 1) + (y * model.width) + (z * model.width * model.height)] == 0x00){
-            var ao = getAO(x, y, z, 'block');
+            var ao = getAO(x, y, z, 'LEFT', block);
 
             var index = geometry.vertices.length - 1;
             geometry.vertices.push(new Vector3(x, y+1, z+1));
@@ -272,15 +272,15 @@ function getSurroundingBlock(_x, _y, _z, mdl){
     for (var z = _z - 1; z <= _z + 1; z++){
       for (var x = _x - 1; x <= _x + 1; x++){
         if ((x < 0 || x >= mdl.width) ||
-            (y < 0 || y >= mdl.width) ||
-            (z < 0 || z >= mdl.width)){
-          block.push(0x00);
+            (y < 0 || y >= mdl.height) ||
+            (z < 0 || z >= mdl.depth)){
+          block.push(0);
         }
-        else if (mdl.data[x + (y * mdl.width) + (z * mdl.width * mdl.height)] > 0x00){
-          block.push(0x01);
+        else if (mdl.data[x + (y * mdl.width) + (z * mdl.width * mdl.height)] > 0){
+          block.push(1);
         }
         else{
-          block.push(0x00);
+          block.push(0);
         }
       }
     }
@@ -307,7 +307,7 @@ function flipQuads(ao){
 }
 
 function getAO(x, y, z, dir, block){
-  var ao = new Uint8Array(4);
+  var ao = new Int8Array(4);
 
   switch(dir){
     case 'TOP':
