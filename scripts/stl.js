@@ -248,4 +248,5 @@ function calcSolidWeight(volume, material){
 
 exports.createFromFox = createFromVox;
 exports.writeToFile = writeToFile;
+exports.calcSolidWeight = calcSolidWeight;
 // exports.createFromGeometry(geo)
