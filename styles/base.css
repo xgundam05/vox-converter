@@ -29,16 +29,69 @@ div{
 }
 
 #handle{
-  position: absolute;
+  position: relative;
   padding-left: 2px;
-  top: -2px;
-  left: -2px;
+  top: -12px;
+  left: -12px;
   width: 200px;
   height: 25px;
+  line-height: 22px;
   background-color: rgba(192, 192, 192, 0.5);
   border: solid 2px transparent;
   border-radius: 5px 5px 0px 0px;
   cursor: move;
   -webkit-user-select: none;
   user-select: none;
+  margin-bottom: -15px;
+}
+
+.header{
+  color: #ddd;
+  border-bottom: solid 1px #ddd;
+  margin-bottom: 4px;
+  position: relative;
+  left: -5px;
+  width: calc(100% + 5px);
+  margin-top: 10px;
+  font-style: italic;
+}
+
+.stat{
+  position: relative;
+  color: #ddd;
+  width: 100%;
+  clear: both;
+  border-bottom: solid 1px #1e1e1e;
+  margin-bottom: 2px;
+  -webkit-user-select: none;
+  user-select: none;
+  cursor: default;
+}
+
+.stat::after{
+  content: attr(data-value);
+  float: right;
+}
+
+.choice{
+  border-bottom: solid 1px #1e1e1e;
+  clear: both;
+  margin-bottom: 2px;
+}
+.choice .label{
+  color: #ddd;
+  -webkit-user-select: none;
+  user-select: none;
+  cursor: default;
+}
+
+.choice select,
+.choice input{
+  float: right;
+  border-radius: 2px;
+  max-width: 60px;
+  border: none;
+  text-align: right;
+  padding-right: 5px;
+  box-sizing: border-box;
 }
