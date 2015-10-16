@@ -234,10 +234,10 @@ function calcSolidWeight(volume, material){
   var weight = 0;
   switch(material){
     case 'PLA':
-      weight = (1.25 * volume) / 1000;
+      weight = (volume / 1000) * 1.25;
       break;
     case 'ABS':
-      weight = (1.04 * volume) / 1000;
+      weight = (volume / 1000) * 1.04;
       break;
     default:
       break;
