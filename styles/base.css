@@ -18,6 +18,7 @@ div{
   padding: 10px;
   z-index: 1000;
   box-shadow: 2px 2px 5px black;
+  overflow: hidden;
 }
 
 #canv{
@@ -43,6 +44,24 @@ div{
   -webkit-user-select: none;
   user-select: none;
   margin-bottom: -15px;
+}
+
+#stlExport{
+  width: 100px;
+  position: absolute;
+  left: calc(50% - 50px);
+  bottom: 15px;
+  border-radius: 5px;
+  background-color: #ccc;
+  box-shadow: 1px 1px 5px black;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+
+#stlExport:active{
+  box-shadow: 0px 0px 0px black;
+  transform: translateY(1px);
 }
 
 .header{
