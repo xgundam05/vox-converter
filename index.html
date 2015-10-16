@@ -14,6 +14,28 @@
     <div id='handle'>Model Stats</div>
     <input type='file' id='voxFile' style='display:none;' />
     <input type='file' id='stlFile' style='display:none;' nwsaveas/>
+
+    <div class='header'>Dimensions</div>
+    <div id='dimW' class='stat' data-value=''>Width</div>
+    <div id='dimH' class='stat' data-value=''>Height</div>
+    <div id='dimD' class='stat' data-value=''>Depth</div>
+
+    <div class='header'>Printing <small>(solid)</small></div>
+    <div class='choice'>
+      <span class='label'>Material</span>
+      <select id='matSelect' >
+        <option>PLA</option>
+        <option>ABS</option>
+      </select>
+    </div>
+    <div class='choice'>
+      <span class='label'>Vox Size <small>(mm)</small></span>
+      <input id='voxelSize' type='number' step='0.01' min='0' value='1.0' />
+    </div>
+    <div id='volume' class='stat' data-value=''>Volume <small>(mm^3)</small></div>
+    <div id='mass' class='stat' data-value=''>Mass <small>(g)</small></div>
+
+    <input type='button' value='Export STL' id='stlExport'></input>
   </div>
   <canvas id='canv' />
 </body>

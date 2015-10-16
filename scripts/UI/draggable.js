@@ -1,6 +1,7 @@
-function draggable(el, handle){
+function draggable(el, limit, handle){
   this.el = el;
   this.handle = handle || el;
+  this.limit = limit || false;
   this.ready = false;
   this.offset = {
     x: 0, y: 0
@@ -19,17 +20,35 @@ function draggable(el, handle){
 
 draggable.prototype = {
   startMove: function(e){
-    this.ready = true;
-    this.offset.x = e.pageX - this.el.offsetLeft;
-    this.offset.y = e.pageY - this.el.offsetTop;
+    if (e.which == 1){
+      this.ready = true;
+      this.offset.x = e.pageX - this.el.offsetLeft;
+      this.offset.y = e.pageY - this.el.offsetTop;
+    }
   },
   stopMove: function(e){
-    this.ready = false;
+    if (e.which == 1)
+      this.ready = false;
   },
   moving: function(e){
-    if (this.ready){
-      this.el.style.top = (e.pageY - this.offset.y) + 'px';
-      this.el.style.left = (e.pageX - this.offset.x) + 'px';
+    if (this.ready && e.which == 1){
+      var top = e.pageY - this.offset.y;
+      var left = e.pageX - this.offset.x;
+
+      if (this.limit){
+        if (this.el.offsetWidth + left > window.innerWidth)
+          left = window.innerWidth - this.el.offsetWidth;
+        else if (left < 0)
+          left = 0;
+
+        if (this.el.offsetHeight + top > window.innerHeight)
+          top = window.innerHeight - this.el.offsetHeight;
+        else if (top < 0)
+          top = 0;
+      }
+
+      this.el.style.top = top + 'px';
+      this.el.style.left = left + 'px';
     }
   }
 };
