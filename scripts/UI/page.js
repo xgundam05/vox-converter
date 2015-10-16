@@ -13,6 +13,7 @@ var worker = undefined;
 window.onload = function(){
   new draggable(
     document.getElementById('controls'),
+    true,
     document.getElementById('handle')
   );
 
