@@ -9,6 +9,7 @@ var win = gui.Window.get();
 var isDOMLoaded = false;
 var renderer = undefined;
 var worker = undefined;
+var voxelModel = undefined;
 
 window.onload = function(){
   new draggable(
@@ -55,11 +56,14 @@ function Initialize(){
 
   document.getElementById('voxFile').addEventListener('change', handleFileOpen, false);
   document.getElementById('stlFile').addEventListener('change', handleFileSave, false);
+  document.getElementById('voxelSize').addEventListener('change', updatePrintStats, false);
+  document.getElementById('matSelect').addEventListener('change', updatePrintStats, false);
 }
 
 function handleFileOpen(e){
   var filePath = this.value;
   var mdl = magicaVoxel.load(filePath);
+  voxelModel = mdl;
 
   var buffer = mdl.getVoxelBuffer();
 
@@ -83,10 +87,42 @@ function handleFileOpen(e){
     mdl.zUp ? mdl.depth : mdl.height,
     mdl.zUp ? mdl.height : mdl.depth
   );
+
+  updateDimensions();
+  updatePrintStats();
 }
 
 function handleFileSave(e){
   // TODO
+}
+
+function updateDimensions(){
+  if (voxelModel){
+    document.getElementById('dimW').dataset.value = voxelModel.width;
+    document.getElementById('dimH').dataset.value = voxelModel.height;
+    document.getElementById('dimD').dataset.value = voxelModel.depth;
+  }
+}
+
+function updatePrintStats(){
+  if (voxelModel){
+    var volume = voxelModel.getVolume();
+    var size = document.getElementById('voxelSize').value;
+    if (size > 0){
+      size = size * size * size;
+
+      var material = document.getElementById('matSelect').value;
+      var printVolume = volume * size;
+      var mass = stl.calcSolidWeight(printVolume, material);
+
+      document.getElementById('volume').dataset.value = printVolume.toFixed(2);
+      document.getElementById('mass').dataset.value = mass.toFixed(2);
+    }
+    else {
+      document.getElementById('volume').dataset.value = 0;
+      document.getElementById('mass').dataset.value = 0;
+    }
+  }
 }
 
 // Create the Window Menu
