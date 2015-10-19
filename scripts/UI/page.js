@@ -58,6 +58,10 @@ function Initialize(){
   document.getElementById('stlFile').addEventListener('change', handleFileSave, false);
   document.getElementById('voxelSize').addEventListener('change', updatePrintStats, false);
   document.getElementById('matSelect').addEventListener('change', updatePrintStats, false);
+  document.getElementById('stlExport').addEventListener('click', function(e){
+    var fout = document.getElementById('stlFile');
+    fout.click();
+  }, false);
 }
 
 function handleFileOpen(e){
@@ -93,7 +97,16 @@ function handleFileOpen(e){
 }
 
 function handleFileSave(e){
-  // TODO
+  var filePath = this.value;
+  var scale = document.getElementById('voxelSize').value;
+  if (voxelModel !== undefined &&
+      scale !== undefined &&
+      scale !== NaN &&
+      scale > 0){
+    var stlModel = stl.createFromVox(voxelModel, scale);
+    //stl.writeToFile(stlModel, filePath + '.bin.stl');
+    stl.writeASCII(stlModel, filePath + '.ascii.stl');
+  }
 }
 
 function updateDimensions(){

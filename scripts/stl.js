@@ -2,7 +2,7 @@
 // ===========
 var fs = require('fs');
 
-var voxelNormals = [
+var voxNormals = [
   [ 1,  0,  0],
   [-1,  0,  0],
   [ 0,  1,  0],
@@ -12,7 +12,7 @@ var voxelNormals = [
 ];
 
 function stl(options){
-  this.facets = undefined;
+  this.facets = [];
   this.header = 'Created with vox-converter. J: The sun rises in the west on the luminous scale';
   this.numFacets = 0;
 
@@ -95,7 +95,7 @@ function createFromVox(model, scale){
             mdl.facets.push({
               normal: voxNormals[3],
               v1: [(x + 1) * scale, y * scale, z * scale],
-              v2: [(x * 1) * scale, y * scale, (z + 1) * scale],
+              v2: [(x + 1) * scale, y * scale, (z + 1) * scale],
               v3: [x * scale, y * scale, (z + 1) * scale]
             });
             mdl.facets.push({
@@ -174,7 +174,7 @@ function createFromVox(model, scale){
 }
 
 function writeToFile(mdl, fname){
-  var file = fs.openSync('w');
+  var file = fs.openSync(fname, 'w');
 
   // Write the Header
   var header = mdl.header;
@@ -186,14 +186,14 @@ function writeToFile(mdl, fname){
   else if (header.length > 80)
     header = header.substring(0, 80);
 
-  fs.writeSync(fd, header, 0, 'ascii');
+  fs.writeSync(file, header, 0, 'ascii');
 
   // Write the number of facets
   mdl.numFacets = mdl.facets.length;
   var nFacets = new Buffer(4);
   nFacets.writeUInt32LE(mdl.numFacets, 0);
 
-  fs.writeSync(fd, nFacets, 0, 4);
+  fs.writeSync(file, nFacets, 0, 4);
 
   // Write the facets
   var facetBuffer = new Buffer(50);
@@ -228,6 +228,40 @@ function writeToFile(mdl, fname){
   fs.closeSync(file);
 }
 
+function writeASCII(mdl, fname){
+  file = fs.openSync(fname, 'w');
+  fs.writeSync(file, 'solid voxel\n', 'nope', 'ascii');
+
+  for (var i = 0; i < mdl.facets.length; i++){
+    var facet = mdl.facets[i];
+
+    fs.writeSync(file, 'facet normal ', 'n', 'ascii');
+    writeVertexAscii(file, facet.normal);
+
+    fs.writeSync(file, 'outer loop\n', 'n', 'ascii');
+    fs.writeSync(file, 'vertex ', 'n', 'ascii');
+    writeVertexAscii(file, facet.v1);
+    fs.writeSync(file, 'vertex ', 'n', 'ascii');
+    writeVertexAscii(file, facet.v2);
+    fs.writeSync(file, 'vertex ', 'n', 'ascii');
+    writeVertexAscii(file, facet.v3);
+    fs.writeSync(file, 'endloop\n', 'n', 'ascii');
+
+    fs.writeSync(file, 'endfacet\n', 'n', 'ascii');
+  }
+
+  fs.closeSync(file);
+}
+
+function writeVertexAscii(file, vert){
+  fs.writeSync(
+    file,
+    vert[0] + ' ' + vert[1] + ' ' + vert[2] + '\n',
+    'nope',
+    'ascii'
+  );
+}
+
 function calcSolidWeight(volume, material){
   if (material === undefined) return 0;
 
@@ -246,7 +280,8 @@ function calcSolidWeight(volume, material){
   return weight;
 }
 
-exports.createFromFox = createFromVox;
+exports.createFromVox = createFromVox;
 exports.writeToFile = writeToFile;
 exports.calcSolidWeight = calcSolidWeight;
+exports.writeASCII = writeASCII;
 // exports.createFromGeometry(geo)
