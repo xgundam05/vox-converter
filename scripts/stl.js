@@ -191,7 +191,7 @@ function writeToFile(mdl, fname){
   // Write the number of facets
   mdl.numFacets = mdl.facets.length;
   var nFacets = new Buffer(4);
-  nFacets.writeUInt32LE(mdl.numFacets, 0);
+  nFacets.writeUInt32LE(mdl.facets.length, 0);
 
   fs.writeSync(file, nFacets, 0, 4);
 
