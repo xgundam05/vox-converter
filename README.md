@@ -1,5 +1,5 @@
 # vox-converter
-Convert Voxel-based models into printable STL format models.
+NW.js application to convert Voxel-based models into printable STL format models.
 
 **Overview**
 
@@ -19,3 +19,7 @@ be "fairly simple" to include. As long as the import class generates a VoxModel 
 **Known Issues**
 
  * The generated binary STL file seems to not play nice with Shapeways. At least when created on a Linux box.
+
+**Build Requirements**
+
+ * [NW.js](http://nwjs.io/) version 0.12.3 or greater
