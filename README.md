@@ -2,6 +2,7 @@
 Convert Voxel-based models into printable STL format models.
 
 **Overview**
+
 This tool was written to facilitate creating 3D-printed miniatures from Voxel models.
 I needed something to easily convert MagicaVoxel format models into STL for a series
 of 3D-printed tabletop miniatures I was working on.
