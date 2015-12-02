@@ -104,7 +104,7 @@ function handleFileSave(e){
       scale !== NaN &&
       scale > 0){
     var stlModel = stl.createFromVox(voxelModel, scale);
-    //stl.writeToFile(stlModel, filePath + '.bin.stl');
+    stl.writeToFile(stlModel, filePath + '.bin.stl');
     stl.writeASCII(stlModel, filePath + '.ascii.stl');
   }
 }
