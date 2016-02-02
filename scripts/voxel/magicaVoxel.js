@@ -77,7 +77,34 @@ function loadFromMain(chunk){
     }
   }
 
-  if (palette !== undefined){ /* TODO: create Palette */ }
+  if (palette !== undefined){
+    model.palette[0] = {r: 0, g: 0, b: 0, a: 0};
+    for (var i = 0; i < palette.size; i += 4){
+      var red = palette.contents[i + 0];
+      var green = palette.contents[i + 1];
+      var blue = palette.contents[i + 2];
+      var alpha = palette.contents[i + 3];
+
+      model.palette.push({
+        r: red,
+        g: green,
+        b: blue,
+        a: alpha
+      });
+    }
+  }
+  else {
+    // Load a default palette of some sort
+    model.palette[0] = {r: 0, g: 0, b: 0, a: 0};
+    for (var i = 0; i < 255; i++){
+      model.palette.push({
+        r: i,
+        g: i,
+        b: i,
+        a: 1
+      });
+    }
+  }
 
   return model;
 }
