@@ -4,6 +4,7 @@ function VoxModel(options){
   this.depth = 0;
   this.zUp = false;
   this.data = [];
+  this.palette = [];
 
   if (options){
     for (var prop in options)
